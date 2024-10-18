@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="et_name" type="id" />
+    <item name="et_address" type="id" />
+    <item name="et_image_url" type="id" />
+    <item name="et_age" type="id" />
+    <item name="et_date" type="id" />
+    <item name="btn_submit" type="id" />
+</resources>
