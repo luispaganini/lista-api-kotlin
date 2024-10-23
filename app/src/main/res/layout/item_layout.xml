@@ -37,13 +37,13 @@
         tools:text="30" />
 
     <TextView
-        android:id="@+id/address"
+        android:id="@+id/profession"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         app:layout_constraintStart_toEndOf="@id/image"
         app:layout_constraintTop_toBottomOf="@id/age"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:text="Av Paulista 1000, São Paulo-SP"/>
+        tools:text="Engenheiro de Software"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

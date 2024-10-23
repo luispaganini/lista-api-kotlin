@@ -4,6 +4,7 @@ package com.example.api_list
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -17,15 +18,23 @@ import com.example.api_list.service.RetrofitClient
 import com.example.api_list.service.safeApiCall
 import com.example.api_list.ui.CircleTransform
 import com.example.api_list.ui.loadUrl
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ItemDetailActivity : AppCompatActivity() {
+class ItemDetailActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityItemDetailBinding
     private lateinit var item: Item
+    private lateinit var mMap: GoogleMap
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityItemDetailBinding.inflate(layoutInflater)
@@ -33,6 +42,8 @@ class ItemDetailActivity : AppCompatActivity() {
 
         setupView()
         loadItem()
+
+        setupGoogleMap()
     }
 
     override fun onResume() {
@@ -65,9 +76,9 @@ class ItemDetailActivity : AppCompatActivity() {
     private fun handleSuccess() {
         binding.name.text = "${item.value.name} ${item.value.surname}"
         binding.age.text = getString(R.string.item_age, item.value.age.toString())
-        binding.address.text = item.value.address
+        binding.profession.text = item.value.profession
         binding.image.loadUrl(item.value.imageUrl)
-
+        loadItemLocationInGoogleMap()
     }
 
     private fun setupView() {
@@ -85,6 +96,13 @@ class ItemDetailActivity : AppCompatActivity() {
         binding.editActionButton.setOnClickListener {
             startActivity(EditActivity.newIntent(this, item.id))
         }
+    }
+
+    private fun setupGoogleMap() {
+        val mapFragment = supportFragmentManager
+            .findFragmentById(R.id.map) as SupportMapFragment
+
+        mapFragment.getMapAsync(this)
     }
 
     private fun deleteItem() {
@@ -108,6 +126,7 @@ class ItemDetailActivity : AppCompatActivity() {
                             getString(R.string.success_delete),
                             Toast.LENGTH_SHORT
                         ).show()
+                        finish()
                     }
                 }
             }
@@ -121,6 +140,30 @@ class ItemDetailActivity : AppCompatActivity() {
             context: Context, itemId: String
         ) = Intent(context, ItemDetailActivity::class.java).apply {
             putExtra(ARG_ID, itemId)
+        }
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+
+        if (::item.isInitialized) {
+            loadItemLocationInGoogleMap()
+        }
+    }
+
+    private fun loadItemLocationInGoogleMap() {
+        item.value.location?.let {
+            binding.googleMapContent.visibility = View.VISIBLE
+            val latLng = LatLng(it.latitude, it.longitude)
+            mMap.addMarker(
+                MarkerOptions()
+                    .position(latLng)
+                    .title(it.name)
+            )
+            mMap.moveCamera(
+                CameraUpdateFactory
+                    .newLatLngZoom(latLng, 16f)
+            )
         }
     }
 }

@@ -77,9 +77,10 @@ class EditActivity : AppCompatActivity() {
                     item.id,
                     binding.etName.text.toString(),
                     binding.etSurname.text.toString(),
-                    binding.etAddress.text.toString(),
+                    binding.etProfession.text.toString(),
                     binding.etImageUrl.text.toString(),
                     binding.etAge.text.toString().toInt(),
+                    location = null,
                     Date()
                 ))
             }
@@ -110,7 +111,7 @@ class EditActivity : AppCompatActivity() {
         binding.etId.setText(item.id)
         binding.etName.setText(item.value.name)
         binding.etSurname.setText(item.value.surname)
-        binding.etAddress.setText(item.value.address)
+        binding.etProfession.setText(item.value.profession)
         binding.etImageUrl.setText(item.value.imageUrl)
         binding.etAge.setText(item.value.age.toString())
     }

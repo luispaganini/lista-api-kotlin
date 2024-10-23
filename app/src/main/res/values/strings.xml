@@ -8,4 +8,6 @@
     <string name="error_create">Erro ao criar o item</string>
     <string name="item_editado_com_sucesso">Item editado com sucesso</string>
     <string name="erro_edit">Erro ao atualizar o usuário</string>
+    <string name="denied_location_permission">Permissão não concedida!</string>
+    <string name="unknown_error">Erro desconhecido.</string>
 </resources>
